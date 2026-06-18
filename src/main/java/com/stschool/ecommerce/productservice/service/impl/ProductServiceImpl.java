@@ -13,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -45,16 +44,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDto> getAll() {
-        return List.of();
+        return productRepository.findAll().stream().map(product -> modelMapper.map(product,ProductResponseDto.class)).toList();
     }
 
     @Override
     public ProductResponseDto update(String id, ProductRequestDto requestDto) throws ProductNotFoundException {
-        return null;
+        productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("Product not found with id: "+ id));
+        return modelMapper.map(productRepository.save(modelMapper.map(requestDto,Product.class)), ProductResponseDto.class);
     }
 
     @Override
-    public void deleteById(ProductRequestDto requestDto) throws ProductNotFoundException {
-
+    public void deleteById(String id) throws ProductNotFoundException {
+        productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("Product not found with id: "+ id));
+        productRepository.deleteById(id);
     }
 }

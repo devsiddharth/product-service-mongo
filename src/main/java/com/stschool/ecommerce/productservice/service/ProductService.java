@@ -12,5 +12,5 @@ public interface ProductService {
     ProductResponseDto getById(String id) throws ProductNotFoundException;
     List<ProductResponseDto> getAll();
     ProductResponseDto update(String id, ProductRequestDto requestDto) throws ProductNotFoundException;
-    void deleteById(ProductRequestDto requestDto) throws ProductNotFoundException;
+    void deleteById(String id) throws ProductNotFoundException;
 }
